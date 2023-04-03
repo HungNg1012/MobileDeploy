@@ -15,14 +15,23 @@ import { Run } from './run.model';
 export class RunsController {
   constructor(private readonly runsService: RunsService) {}
   @Get()
+  @ApiOperation({ description: 'Retrieve all runs' })
+  @ApiResponse({ status: 200, description: 'Runs was gotten successfully'})
+  @ApiResponse({ status: 404, description: 'Runs are not found'})
   getAllRun() {
     return this.runsService.getAllRun();
   }
   @Get(':id')
+  @ApiOperation({ description: 'Retrieve a run with an ID' })
+  @ApiResponse({ status: 200, description: 'Run was gotten successfully'})
+  @ApiResponse({ status: 404, description: 'No run is founded with the given ID'})
   getRun(@Param('id') id: string) {
     return this.runsService.getRun(id);
   }
   @Post('add')
+  @ApiOperation({ description: 'Create a run' })
+  @ApiResponse({ status: 200, description: 'Run was created successfully'})
+  @ApiResponse({ status: 400, description: 'Request was malformed, e.g. id was null'})
   addRun(@Body('time') time: number, @Body('desc') desc: string) {
     return this.runsService.createRun(desc, time);
   }
@@ -40,4 +49,5 @@ export class RunsController {
   updateRun(@Body() payload: Run) {
     return this.runsService.updateRun(payload.id, payload);
   }
+  
 }
