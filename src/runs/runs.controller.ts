@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiResponse, ApiOperation, ApiProperty  } from '@nestjs/swagger';
 import { RunsService } from './runs.service';
 import { Run } from './run.model';
 
@@ -26,10 +27,16 @@ export class RunsController {
     return this.runsService.createRun(desc, time);
   }
   @Get('delete/:id')
+  @ApiOperation({ description: 'Removes a run with the given ID if possible.' })
+  @ApiResponse({ status: 200, description: 'Run was deleted successfully'})
+  @ApiResponse({ status: 404, description: 'A run with the given ID does not exist'})
   deleteRun(@Param('id') id: string) {
     return this.runsService.deleteRun(id);
   }
   @Post('update')
+  @ApiResponse({ status: 200, description: 'Run was updated successfully'})
+  @ApiResponse({ status: 400, description: 'Request was malformed, e.g. id was null'})
+  @ApiResponse({ status: 404, description: 'A run with the given ID does not exist'})
   updateRun(@Body() payload: Run) {
     return this.runsService.updateRun(payload.id, payload);
   }
